@@ -150,6 +150,35 @@ aerosol_ratio = aerosol_count / num_particles
 unseq_breach_ratio = unsequenced_breaches / (escaped_count if escaped_count > 0 else 1)
 norm_diffusion = (mean_diffusion - 0.5) / (1.5 - 0.5)  # assuming D ranges from 0.5 to 1.5
 
+# === PHASE 2: Worker-Pathogen Proximity Risk ===
+proximity_events = []
+for w in range(num_workers):
+    for i in range(steps):
+        for n in range(num_particles):
+            dist = np.linalg.norm(positions[n, i] - worker_positions[w, i])
+            if dist < 2.0:
+                proximity_events.append((i, w, n))
+
+# Calculate time-based overlap count
+overlap_series = pd.Series([e[0] for e in proximity_events])
+if not overlap_series.empty:
+    time_bins = np.arange(0, steps+1, steps//20)
+    overlap_counts = overlap_series.value_counts().reindex(time_bins, fill_value=0).sort_index()
+else:
+    time_bins = np.arange(0, steps+1, steps//20)
+    overlap_counts = pd.Series(0, index=time_bins)
+
+st.subheader("👣 Worker-Pathogen Proximity Risk")
+st.markdown(f"**Total Close Contact Events (<2μm):** {len(proximity_events)}")
+fig3, ax3 = plt.subplots()
+ax3.plot(overlap_counts.index, overlap_counts.values, marker='o')
+ax3.set_title("Time-Series of Proximity Events")
+ax3.set_xlabel("Time Step")
+ax3.set_ylabel("Close Contacts")
+st.pyplot(fig3)
+
+
+
 # CRI: weighted average of components
 CRI = 0.4 * escaped_ratio + 0.2 * aerosol_ratio + 0.3 * unseq_breach_ratio + 0.1 * norm_diffusion
 CRI = round(CRI, 3)
