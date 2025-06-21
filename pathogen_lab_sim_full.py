@@ -128,19 +128,15 @@ with col3:
     st.json(aerosolized_types)
 
 # CSV log
-df_log = pd.DataFrame({
-    "Type": types,
-    "Escaped": escaped,
-    "Sequenced": sequenced,
-    "Aerosolized": aerosolized
-})
-csv = df_log.to_csv(index=False).encode("utf-8")
-st.download_button("📥 Download Simulation Log", csv, "simulation_log.csv", "text/csv")
-# Upgrade the app by adding:
-# 1. Contamination Risk Index (CRI)
-# 2. Sequenced-Before-Escape Score (SBE)
+#df_log = pd.DataFrame({
+  #  "Type": types,
+  #  "Escaped": escaped,
+  #  "Sequenced": sequenced,
+   # "Aerosolized": aerosolized
+#})
+#csv = df_log.to_csv(index=False).encode("utf-8")
+#st.download_button("📥 Download Simulation Log", csv, "simulation_log.csv", "text/csv")
 
-full_risk_metrics_code = """
 # Calculate contamination risk index (CRI) and sequenced-before-escape score (SBE)
 # CRI factors: breach %, aerosol %, unsequenced breaches, weighted diffusion
 escaped_count = np.sum(escaped)
@@ -167,18 +163,14 @@ SBE = round(SBE, 3)
 st.subheader("🧯 Biosecurity Metrics")
 st.markdown(f"**Contamination Risk Index (CRI):** {CRI}  {'🟢 Low' if CRI < 0.3 else '🟡 Medium' if CRI < 0.6 else '🔴 High'}")
 st.markdown(f"**Sequenced-Before-Escape Score (SBE):** {SBE}  {'✅ Efficient' if SBE > 0.7 else '⚠️ Needs Improvement' if SBE > 0.3 else '❌ Critical'}")
-"""
 
-# Load the original full app code
-with open("/mnt/data/pathogen_lab_sim_full.py", "r") as f:
-    original_code = f.read()
 
-# Insert metrics into the full version (just before the CSV section)
-updated_code = original_code.replace("# CSV log", full_risk_metrics_code + "\n\n# CSV log")
-
-# Save the updated full app with Phase 1 metrics
-updated_path = "/mnt/data/pathogen_lab_sim_full_with_risk_metrics.py"
-with open(updated_path, "w") as f:
-    f.write(updated_code)
-
-updated_path
+# CSV log
+df_log = pd.DataFrame({
+    "Type": types,
+    "Escaped": escaped,
+    "Sequenced": sequenced,
+    "Aerosolized": aerosolized
+})
+csv = df_log.to_csv(index=False).encode("utf-8")
+st.download_button("📥 Download Simulation Log", csv, "simulation_log.csv", "text/csv")
