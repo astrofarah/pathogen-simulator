@@ -136,3 +136,49 @@ df_log = pd.DataFrame({
 })
 csv = df_log.to_csv(index=False).encode("utf-8")
 st.download_button("📥 Download Simulation Log", csv, "simulation_log.csv", "text/csv")
+# Upgrade the app by adding:
+# 1. Contamination Risk Index (CRI)
+# 2. Sequenced-Before-Escape Score (SBE)
+
+full_risk_metrics_code = """
+# Calculate contamination risk index (CRI) and sequenced-before-escape score (SBE)
+# CRI factors: breach %, aerosol %, unsequenced breaches, weighted diffusion
+escaped_count = np.sum(escaped)
+aerosol_count = np.sum(aerosolized)
+unsequenced_breaches = np.sum((escaped) & (~sequenced))
+mean_diffusion = np.mean([pathogen_types[t]['D'] for t in types])
+
+# Normalize components to 0–1
+escaped_ratio = escaped_count / num_particles
+aerosol_ratio = aerosol_count / num_particles
+unseq_breach_ratio = unsequenced_breaches / (escaped_count if escaped_count > 0 else 1)
+norm_diffusion = (mean_diffusion - 0.5) / (1.5 - 0.5)  # assuming D ranges from 0.5 to 1.5
+
+# CRI: weighted average of components
+CRI = 0.4 * escaped_ratio + 0.2 * aerosol_ratio + 0.3 * unseq_breach_ratio + 0.1 * norm_diffusion
+CRI = round(CRI, 3)
+
+# Sequenced-before-escape (SBE)
+sequenced_and_escaped = np.sum((escaped) & (sequenced))
+SBE = sequenced_and_escaped / (escaped_count if escaped_count > 0 else 1)
+SBE = round(SBE, 3)
+
+# Display results
+st.subheader("🧯 Biosecurity Metrics")
+st.markdown(f"**Contamination Risk Index (CRI):** {CRI}  {'🟢 Low' if CRI < 0.3 else '🟡 Medium' if CRI < 0.6 else '🔴 High'}")
+st.markdown(f"**Sequenced-Before-Escape Score (SBE):** {SBE}  {'✅ Efficient' if SBE > 0.7 else '⚠️ Needs Improvement' if SBE > 0.3 else '❌ Critical'}")
+"""
+
+# Load the original full app code
+with open("/mnt/data/pathogen_lab_sim_full.py", "r") as f:
+    original_code = f.read()
+
+# Insert metrics into the full version (just before the CSV section)
+updated_code = original_code.replace("# CSV log", full_risk_metrics_code + "\n\n# CSV log")
+
+# Save the updated full app with Phase 1 metrics
+updated_path = "/mnt/data/pathogen_lab_sim_full_with_risk_metrics.py"
+with open(updated_path, "w") as f:
+    f.write(updated_code)
+
+updated_path
