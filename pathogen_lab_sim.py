@@ -1,7 +1,4 @@
 
-nano pathogen_simulator_app.py
-streamlit run pathogen_simulator_app.py
-pip install numpy matplotlib
 
 import numpy as np
 import matplotlib.pyplot as plt
