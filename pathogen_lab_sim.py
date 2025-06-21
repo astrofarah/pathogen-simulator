@@ -1,4 +1,4 @@
-
+fig, ax = plt.subplots(figsize=(8, 8))
 import streamlit as st
 
 import numpy as np
