@@ -145,3 +145,7 @@ for k in pathogen_types:
     print(f"  Escaped: {escaped_types[k]}")
     print(f"  Sequenced: {sequenced_types[k]}")
     print(f"  Aerosolized: {aerosolized_types[k]}")
+st.title("...")
+st.write("...")
+st.pyplot(fig)
+st.plotly_chart(...)
