@@ -150,6 +150,20 @@ aerosol_ratio = aerosol_count / num_particles
 unseq_breach_ratio = unsequenced_breaches / (escaped_count if escaped_count > 0 else 1)
 norm_diffusion = (mean_diffusion - 0.5) / (1.5 - 0.5)  # assuming D ranges from 0.5 to 1.5
 
+# CRI: weighted average of components
+CRI = 0.4 * escaped_ratio + 0.2 * aerosol_ratio + 0.3 * unseq_breach_ratio + 0.1 * norm_diffusion
+CRI = round(CRI, 3)
+
+# Sequenced-before-escape (SBE)
+sequenced_and_escaped = np.sum((escaped) & (sequenced))
+SBE = sequenced_and_escaped / (escaped_count if escaped_count > 0 else 1)
+SBE = round(SBE, 3)
+
+# Display results
+st.subheader("🧯 Biosecurity Metrics")
+st.markdown(f"**Contamination Risk Index (CRI):** {CRI}  {'🟢 Low' if CRI < 0.3 else '🟡 Medium' if CRI < 0.6 else '🔴 High'}")
+st.markdown(f"**Sequenced-Before-Escape Score (SBE):** {SBE}  {'✅ Efficient' if SBE > 0.7 else '⚠️ Needs Improvement' if SBE > 0.3 else '❌ Critical'}")
+
 # === PHASE 2: Worker-Pathogen Proximity Risk ===
 proximity_events = []
 for w in range(num_workers):
@@ -177,21 +191,6 @@ ax3.set_xlabel("Time Step")
 ax3.set_ylabel("Close Contacts")
 st.pyplot(fig3)
 
-
-
-# CRI: weighted average of components
-CRI = 0.4 * escaped_ratio + 0.2 * aerosol_ratio + 0.3 * unseq_breach_ratio + 0.1 * norm_diffusion
-CRI = round(CRI, 3)
-
-# Sequenced-before-escape (SBE)
-sequenced_and_escaped = np.sum((escaped) & (sequenced))
-SBE = sequenced_and_escaped / (escaped_count if escaped_count > 0 else 1)
-SBE = round(SBE, 3)
-
-# Display results
-st.subheader("🧯 Biosecurity Metrics")
-st.markdown(f"**Contamination Risk Index (CRI):** {CRI}  {'🟢 Low' if CRI < 0.3 else '🟡 Medium' if CRI < 0.6 else '🔴 High'}")
-st.markdown(f"**Sequenced-Before-Escape Score (SBE):** {SBE}  {'✅ Efficient' if SBE > 0.7 else '⚠️ Needs Improvement' if SBE > 0.3 else '❌ Critical'}")
 
 
 # CSV log
