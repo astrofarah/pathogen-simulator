@@ -1,4 +1,4 @@
-pip install streamlit
+
 nano pathogen_simulator_app.py
 streamlit run pathogen_simulator_app.py
 pip install numpy matplotlib
