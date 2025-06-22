@@ -7,7 +7,7 @@ import pandas as pd
 
 # Page config
 st.set_page_config(page_title="Simulating Pathogen movement in metagenomic sequencing to quantify biocontainment risks through incorporating breach scenarios", layout="wide")
-st.title("🧬 Pathogen on the Loose: Full Lab Simulation Dashboard")
+st.title("🧬 Pathogen on the Loose: Simulating Pathogen movement in metagenomic sequencing to quantify biocontainment risks through incorporating breach scenarios")
 
 # Sidebar parameters
 st.sidebar.header("Simulation Parameters")
