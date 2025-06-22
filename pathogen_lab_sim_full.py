@@ -6,7 +6,7 @@ import seaborn as sns
 import pandas as pd
 
 # Page config
-st.set_page_config(page_title="Pathogen Simulator Full", layout="wide")
+st.set_page_config(page_title="Simulating Pathogen movement in metagenomic sequencing to quantify biocontainment risks through incorporating breach scenarios", layout="wide")
 st.title("🧬 Pathogen on the Loose: Full Lab Simulation Dashboard")
 
 # Sidebar parameters
