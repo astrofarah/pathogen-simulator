@@ -7,7 +7,7 @@ import pandas as pd
 
 # Page config
 st.set_page_config(page_title="Simulating Pathogen movement in metagenomic sequencing to quantify biocontainment risks through incorporating breach scenarios", layout="wide")
-st.title("🧬 Pathogen on the Loose: Simulating Pathogen movement in metagenomic sequencing to quantify biocontainment risks through incorporating breach scenarios")
+st.title(" Simulating Pathogen movement in metagenomic sequencing to quantify biocontainment risks through incorporating breach scenarios")
 
 # Sidebar parameters
 st.sidebar.header("Simulation Parameters")
@@ -127,18 +127,7 @@ with col3:
     st.write("**Aerosolized by type**")
     st.json(aerosolized_types)
 
-# CSV log
-#df_log = pd.DataFrame({
-  #  "Type": types,
-  #  "Escaped": escaped,
-  #  "Sequenced": sequenced,
-   # "Aerosolized": aerosolized
-#})
-#csv = df_log.to_csv(index=False).encode("utf-8")
-#st.download_button("📥 Download Simulation Log", csv, "simulation_log.csv", "text/csv")
 
-# Calculate contamination risk index (CRI) and sequenced-before-escape score (SBE)
-# CRI factors: breach %, aerosol %, unsequenced breaches, weighted diffusion
 escaped_count = np.sum(escaped)
 aerosol_count = np.sum(aerosolized)
 unsequenced_breaches = np.sum((escaped) & (~sequenced))
@@ -182,7 +171,7 @@ else:
     time_bins = np.arange(0, steps+1, steps//20)
     overlap_counts = pd.Series(0, index=time_bins)
 
-st.subheader("👣 Worker-Pathogen Proximity Risk")
+st.subheader("Worker-Pathogen Proximity Risk")
 st.markdown(f"**Total Close Contact Events (<2μm):** {len(proximity_events)}")
 fig3, ax3 = plt.subplots()
 ax3.plot(overlap_counts.index, overlap_counts.values, marker='o')
@@ -201,4 +190,4 @@ df_log = pd.DataFrame({
     "Aerosolized": aerosolized
 })
 csv = df_log.to_csv(index=False).encode("utf-8")
-st.download_button("📥 Download Simulation Log", csv, "simulation_log.csv", "text/csv")
+st.download_button(" Download Simulation Log", csv, "simulation_log.csv", "text/csv")
